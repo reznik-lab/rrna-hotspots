@@ -7,7 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE, echo = FALSE}
 rm(list=ls())
-setwd("~/Desktop/reznik/gel_paper/analysis/")
+setwd("~/Desktop/reznik/rrna-hotspots/analysis")
 knitr::opts_chunk$set(echo = FALSE)
 source('./prerequisites.R')
 
@@ -17,7 +17,7 @@ n_samples_pcawg     <- 1951
 n_samples_tcga      <- 10000
 
 ## load data
-gel_hotspots        <- read.csv("../data/hotspots_snv_0223.txt", header = TRUE, sep = "\t") %>%
+gel_hotspots        <- read.csv("../data/processed/fig1_2_tables/processed/fig1_2_tables/hotspots_snv_0223.txt", header = TRUE, sep = "\t") %>%
                        subset(q.value < 0.05)
 
 setnames(gel_hotspots, "pos", "Start_Position")
@@ -25,7 +25,7 @@ setnames(gel_hotspots, "symbol", "Hugo_Symbol")
 
 gel_hotspots$Start_Position <- as.integer(gel_hotspots$Start_Position)
 
-gel_mutations       <- read.csv("../data/mtvariantcounts_0226.txt", sep = "\t", header = TRUE) 
+gel_mutations       <- read.csv("../data/processed/fig1_2_tables/mtvariantcounts_0226.txt", sep = "\t", header = TRUE) 
 
 # split the data frame to the ref and alt and remove all indels
 split_columns       <- strsplit(gel_mutations$ShortVariantID, ":")
@@ -40,25 +40,25 @@ n_indels            <- length(unique(indels$Pos))
 gel_mutations       <- gel_mutations %>% 
                        subset(!Ref == "-" & !Alt == "-")
 n_snvs              <- length(unique(gel_mutations$Pos))
-helix_muts          <- read.csv("../data/helix_mutations.csv", sep = ",", header = TRUE, row.names=1)  %>% 
+helix_muts          <- read.csv("../data/processed/fig1_2_tables/helix_mutations.csv", sep = ",", header = TRUE, row.names=1)  %>% 
                        subset(variant_type == "SNP") 
 
 allpos              <- data.frame(1:16569)
 colnames(allpos)    <- c('position')
 
-annotations         <- read.csv("../data/mito_rRNA_annotations_NL.tsv", sep = "\t")
+annotations         <- read.csv("../data/processed/fig1_2_tables/mito_rRNA_annotations_NL.tsv", sep = "\t")
 
-pcawg_mutations     <- read.csv("../data/data_mutations_pcawg.txt", sep = "\t", header = TRUE) %>% 
+pcawg_mutations     <- read.csv("../data/processed/fig1_2_tables/data_mutations_pcawg.txt", sep = "\t", header = TRUE) %>% 
                        subset(Variant_Type == "SNP")
-pcawg_hotspots      <- read.csv("../data/hotspots_snv_pcawg.txt", sep = "\t", header = TRUE) %>%
+pcawg_hotspots      <- read.csv("../data/processed/fig1_2_tables/hotspots_snv_pcawg.txt", sep = "\t", header = TRUE) %>%
                        subset(q.value < 0.05)
 
-tcga_mutations      <- read.csv("../data/data_mutations_tcga.txt", sep = "\t", header = TRUE) %>% 
+tcga_mutations      <- read.csv("../data/processed/fig1_2_tables/data_mutations_tcga.txt", sep = "\t", header = TRUE) %>% 
                        subset(Variant_Type == "SNP")
-tcga_hotspots       <- read.csv("../data/hotspots_snv_precalculated.txt", sep = "\t", header = TRUE) %>%
+tcga_hotspots       <- read.csv("../data/processed/fig1_2_tables/hotspots_snv_precalculated.txt", sep = "\t", header = TRUE) %>%
                        subset(q.value < 0.05)
 
-pathogenic_pc       <- read.csv("../data/MitImpact_db_3.1.2.txt", sep = "\t", header = TRUE)
+pathogenic_pc       <- read.csv("../data/processed/fig1_2_tables/MitImpact_db_3.1.2.txt", sep = "\t", header = TRUE)
 
 get_pdfs <- TRUE
 ```
@@ -84,7 +84,7 @@ panel_1b <- ggplot() +
        y = "# Mutations at Position") +
   theme(legend.position = "none") 
  
-if(get_pdfs==T) ggsave('../figures_v2/panel_1b.pdf',width=4,height=2.5)
+if(get_pdfs==T) ggsave('../figures/figure1/panel_1b.pdf',width=4,height=2.5)
 
 ```
 
@@ -121,7 +121,7 @@ panel_1c <- ggplot(table_annotations, aes(x = "", y = prop, fill = Var1)) +
         axis.ticks.x = element_blank(),
         legend.position = "left")
 
-if(get_pdfs==T) ggsave('../figures_v2/panel_1c.pdf',width=2,height=2.5)
+if(get_pdfs==T) ggsave('../figures/figure1/panel_1c.pdf',width=2,height=2.5)
 ```
 
 ## 1e
@@ -164,7 +164,7 @@ panel_1e            <- ggplot(table_pergene, aes(x = Var1, y = Freq)) +
                             legend.key = element_blank(),
                             legend.position = "none")
   
-if(get_pdfs==T) ggsave('../figures_v2/panel_1e.pdf',width=2.5,height=2.5)
+if(get_pdfs==T) ggsave('../figures/figure1/panel_1e.pdf',width=2.5,height=2.5)
 rm(gene_list_1e, table_pergene)
 ```
 
@@ -204,7 +204,7 @@ panel_2e                        <- ggplot(all_muts_melt, aes(x=Hotspot, y=Propor
 
 p.value                          <- fisher.test(table(rnr_muts_annotated$annotation, rnr_muts_annotated$is_hotspot)) #0.0005267
 p.value
-if(get_pdfs==T) ggsave('../figures_v2/panel_2e.pdf',width=2.5,height=2)
+if(get_pdfs==T) ggsave('../figures/figure2/panel_2e.pdf',width=2.5,height=2)
 
 ```
 ## 2f
@@ -282,7 +282,7 @@ p.value     <-  fisher.test(matrix(table_of_constrained_hots$Freq, ncol = 2)) #0
 p.value
 
 p.value$est
-if(get_pdfs==T) ggsave('../figures_v2/panel_2h.pdf',width=2.5,height=2)
+if(get_pdfs==T) ggsave('../figures/figure2/panel_2h.pdf',width=2.5,height=2)
 ```
 ## 2i
 ```{r panel_2h, fig.height = 2, fig.width = 2, eval = TRUE}
@@ -347,7 +347,7 @@ panel_2h                       <- ggplot(table_of_constrained_hots, aes(x = Var2
 
 p.value     <-  fisher.test(matrix(table_of_constrained_hots$Freq, ncol = 2)) #0.007889
 p.value
-if(get_pdfs==T) ggsave('../figures_v2/panel_2i.pdf',width=2.5,height=2)
+if(get_pdfs==T) ggsave('../figures/figure2/panel_2i.pdf',width=2.5,height=2)
 ```
 
 # Supplementary Figures
@@ -397,7 +397,7 @@ supp2a                     <- ggplot(merged_tcga_gel, aes(x=GEL, y=TCGA, color=c
                               scale_color_manual(values = c("#FB8072", "#80B1D3","#B3DE69", "#D9D9D9"),
                                                  breaks = c("Hotspot GEL+TCGA", "Hotspot GEL", "Hotspot TCGA", "Not Hotspot"))
 
-if(get_pdfs==T) ggsave('../figures_v2/supp_2a.pdf',width=3.5,height=3)
+if(get_pdfs==T) ggsave('../figures/SI_figures/supp_2a.pdf',width=3.5,height=3)
 ```
 
 # Supplementary Figure 2b
@@ -443,7 +443,7 @@ supp2b                    <- ggplot(merged_pcawg_gel, aes(x=GEL, y=PCAWG, color=
                              scale_color_manual(values = c("#FB8072", "#80B1D3","#B3DE69", "#D9D9D9"),
                                                 breaks = c("Hotspot GEL+PCAWG", "Hotspot GEL", "Hotspot PCAWG", "Not Hotspot"))
 
-if(get_pdfs==T) ggsave('../figures_v2/supp_2b.pdf',width=3.5,height=3)
+if(get_pdfs==T) ggsave('../figures/SI_figures/supp_2b.pdf',width=3.5,height=3)
 ```
 
 ## Supplementary Figure 3a
@@ -454,10 +454,10 @@ if(get_pdfs==T) ggsave('../figures_v2/supp_2b.pdf',width=3.5,height=3)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # load in known variants from mitomap
-rnr_foswiki               <- read.csv("../data/MutationsRNACfrm  MITOMAP  Foswiki.csv", sep = ",", header = TRUE,   check.names = TRUE)  %>% 
+rnr_foswiki               <- read.csv("../data/processed/fig1_2_tables/MutationsRNACfrm  MITOMAP  Foswiki.csv", sep = ",", header = TRUE,   check.names = TRUE)  %>% 
                              select(Position, Locus)
 
-pc_foswiki                <- read.csv("../data/ConfirmedMutations  MITOMAP  Foswiki.csv", sep = ",", header = TRUE, check.names = TRUE) %>% 
+pc_foswiki                <- read.csv("../data/processed/fig1_2_tables/ConfirmedMutations  MITOMAP  Foswiki.csv", sep = ",", header = TRUE, check.names = TRUE) %>% 
                              select(Position, Locus)
 
 # merge pc and rrna
@@ -486,7 +486,7 @@ barplot_mitomap_known_disease_causing <- ggplot(table_class_foswiki, aes(x = Var
        y = "Number of Known Disease Causing Variants")
 
 # save file
-ggsave(barplot_mitomap_known_disease_causing, file = "../figures_v2/supp_3a.pdf", width = 2, height = 2)
+ggsave(barplot_mitomap_known_disease_causing, file = "../figures/SI_figures/supp_3a.pdf", width = 2, height = 2)
 
 (which(pc_foswiki$Position %in% pc_hotspots$Start_Position))
 # chisq. pvalue < 0.01 (3.5e-21 (tRNA vs rRNA), 4.7e-9(PC vs rRNA))
