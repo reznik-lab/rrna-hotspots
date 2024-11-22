@@ -4,18 +4,39 @@ Clone the directory:
 ```
 git clone https://github.com/reznik-lab/rrna-hotspots.git
 ```
-1. All packages can be installed from
+All packages can be installed from
 ```
 ./analysis/prerequisites.R
 ```
-2. mtDNA mutation calling across the GEL cohort was conducted within the genomics england research environment.
+## Whole-Genome-Sequencing Analysis (GEL)
+1. mtDNA mutation calling across the GEL cohort was conducted within the genomics england research environment.
 
-3. To calculate hotspot mutations, a master maf file is passed as input.
+2. To calculate hotspot mutations, a master maf file is passed as input. 
 ```
 ./analysis/run_hotspots_snv.R
 ```
-4. To produce figures 1 and 2, the code is available here:
+3. To produce figures 1 and 2, the code is available here:
 ```
 ./analysis/generate_all_figures_01_05.Rmd
 ```
-5. 
+
+## Single-Cell Multiome Analysis
+1. To call mtDNA mutations, mgatk v.7.0 was used on the 10x output to produce a parseable Seurat object:
+```
+git clone https://github.com/caleblareau/mgatk
+```
+Then specific variants were parsed using:
+```
+./analysis/get_mutations_atac_data.R
+```
+The remaining analysis to produce figure 3 is available at
+```
+./analysis/generate_fig3scRNAseqfigs.Rmd
+```
+
+## Proteomics and Metabolomics Analysis 
+Code to generate figures is available at:
+```
+./analysis/generate_functional_figs.Rmd
+```
+
