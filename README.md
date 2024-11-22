@@ -21,8 +21,9 @@ All packages can be installed from
 ```
 
 ## Single-Cell Multiome Analysis
-1. To call mtDNA mutations, mgatk v.7.0 was used on the 10x output to produce a parseable Seurat object:
+1. To call mtDNA mutations, mgatk v.7.0 was used on the 10x output to produce a parseable Seurat object. We have uploaded the count matrices and the resulting Rds objects from running mgatk to Zenodo:
 ```
+10.5281/zenodo.14207223
 git clone https://github.com/caleblareau/mgatk
 ```
 Then specific variants were parsed using:
