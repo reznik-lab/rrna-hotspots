@@ -28,3 +28,12 @@ Coded needed to generate figures seen in main text and extended data.
             └── prerequisites.R
 
 For code to call mtDNA variants, please refer to https://github.com/reznik-lab/mtdna-dlp
+
+## For SNV hotspot mutations run 
+```
+./src/GEL/run_snv_hotspots.R
+```
+Ensure you have the following files:
+* mtDNA MAF file
+* Annotated genome .fa file
+* Annotated chrM (see Supplementary Table 5)
