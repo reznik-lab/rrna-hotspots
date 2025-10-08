@@ -36,6 +36,6 @@ For code to call mtDNA variants, please refer to https://github.com/reznik-lab/m
 Ensure you have the following files:
 * mtDNA MAF file with the following fields
   * `flanking_bps` = the flanking nucleotides 
-  * 'pos' = genomic position
+  * `pos` = genomic position
 * Annotated genome .fa file
 * Annotated chrM (see Supplementary Table 5)
